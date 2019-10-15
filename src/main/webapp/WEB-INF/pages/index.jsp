@@ -35,7 +35,7 @@
         <form method="post" action="getUser">
 
             Login: <input type="text" name="userLogin"/> <br/>
-            <input type="submit">
+            <input type="submit" value="Поиск">
 
         </form>
 

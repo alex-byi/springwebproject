@@ -4,7 +4,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
     <title>Car rent</title>
 </head>
@@ -39,16 +39,15 @@
         </tr>
     </c:forEach>
 </table>
-
 <c:forEach begin="1" end="${pagesCount}" step="1" varStatus="i">
-    <c:url value="/users" var="url">
+    <c:url value="/control_user" var="url">
         <c:param name="page" value="${i.index}"/>
     </c:url>
     <a href="${url}">${i.index}</a>
 </c:forEach>
 
 
-<h2><a href = "/spring-web-project/control_car">На страницу со всеми автомобилями</a> </h2>
-<h2><a href = "/spring-web-project/">На главную</a> </h2>
+<h2><a href="/spring-web-project/control_car">На страницу со всеми автомобилями</a></h2>
+<h2><a href="/spring-web-project/">На главную</a></h2>
 </body>
 </html>

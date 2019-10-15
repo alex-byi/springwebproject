@@ -30,4 +30,22 @@ public class CarServiceImpl implements CarService {
     public int carCount() {
         return carDao.carCount();
     }
+
+    @Override
+    @Transactional
+    public Car getCarById(int id) {
+        return carDao.getCarById(id);
+    }
+
+    @Override
+    @Transactional
+    public boolean deactivateCar(Car car) {
+        return carDao.deactivateCar(car);
+    }
+
+    @Override
+    @Transactional
+    public boolean activateCar(Car car) {
+        return carDao.activateCar(car);
+    }
 }

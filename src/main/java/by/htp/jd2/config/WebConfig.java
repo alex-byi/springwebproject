@@ -1,7 +1,5 @@
 package by.htp.jd2.config;
 
-
-import by.htp.jd2.service.impl.UserDetailServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

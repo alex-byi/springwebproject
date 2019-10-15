@@ -58,6 +58,29 @@ public class AppController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/deactivateCar")
+    public ModelAndView deactivateCar(@RequestParam int idCar) {
+        Car car = carService.getCarById(idCar);
+        carService.deactivateCar(car);
+        return controlCars(1);
+    }
+
+    @RequestMapping(value = "/activateCar")
+    public ModelAndView activateCar(@RequestParam int idCar) {
+        Car car = carService.getCarById(idCar);
+        carService.activateCar(car);
+        return controlCars(1);
+    }
+
+    @RequestMapping(value = "/getUser")
+    public ModelAndView getUser(@RequestParam("userLogin") String login) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("index");
+        User userLogin = userService.getUser(login);
+        modelAndView.addObject("userLogin", userLogin);
+        return modelAndView;
+    }
+
     @RequestMapping(value = "/control_user", method = RequestMethod.GET)
     public ModelAndView allUsers(@RequestParam(defaultValue = "1") int page) {
         List<User> users = userService.getAllUsers(page);
@@ -101,14 +124,6 @@ public class AppController {
         userService.addUser(user);
         modelAndView.addObject("registration", "Registration OK");
         modelAndView.addObject("user", user);
-        return modelAndView;
-    }
-    @RequestMapping(value = "/getUser")
-    public ModelAndView getUser(@RequestParam("userLogin") String login) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("index");
-        User userLogin = userService.getUser(login);
-        modelAndView.addObject("userLogin", userLogin);
         return modelAndView;
     }
 

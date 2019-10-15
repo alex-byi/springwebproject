@@ -30,21 +30,35 @@
             <td>${car.color}</td>
             <td>${car.body}</td>
             <td>${car.transmissionType}</td>
-            <td>${car.active}</td>
+            <td>
+                <c:if test="${car.active == true}">
+                    <form method="post" action="deactivateCar">
+                        <input type="hidden" name= idCar value="${car.id}"/>
+                        <input type="hidden" name= pageNum value="page"/>
+                        <input type="submit" value="DEACTIVATE" onclick="return confirm('are u shure?')">
+                    </form>
+                </c:if>
+                <c:if test="${car.active == false}">
+                    <form method="post" action="activateCar">
+                        <input type="hidden" name= idCar value="${car.id}"/>
+                        <input type="submit" value="ACTIVATE" onclick="return confirm('are u shure?')">
+                    </form>
+                </c:if>
+            </td>
         </tr>
     </c:forEach>
 </table>
 <c:forEach begin="1" end="${pagesCount}" step="1" varStatus="i">
-    <c:url value="/cars" var="url">
+    <c:url value="/control_car" var="url">
         <c:param name="page" value="${i.index}"/>
     </c:url>
     <a href="${url}">${i.index}</a>
 </c:forEach>
 
-<h2><a href="/spring-web-project/add_car">Добавить автомобиль</a> </h2>
+<h2><a href="/spring-web-project/add_car">Добавить автомобиль</a></h2>
 <br>
-<h2><a href="/spring-web-project/control_user">Управление пользователями</a> </h2>
+<h2><a href="/spring-web-project/control_user">Управление пользователями</a></h2>
 
-<h2><a href="/spring-web-project/">На главную</a> </h2>
+<h2><a href="/spring-web-project/">На главную</a></h2>
 </body>
 </html>

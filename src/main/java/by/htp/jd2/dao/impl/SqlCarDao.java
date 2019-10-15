@@ -4,6 +4,7 @@ import by.htp.jd2.dao.CarDao;
 import by.htp.jd2.entity.Car;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -29,5 +30,29 @@ public class SqlCarDao implements CarDao {
     public int carCount(){
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select count(*) from Car", Number.class).getSingleResult().intValue();
+    }
+
+    @Override
+    public Car getCarById(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Car where id = :paramName");
+        query.setParameter("paramName", id);
+        return (Car) query.getSingleResult();
+    }
+
+    @Override
+    public boolean deactivateCar(Car car) {
+        Session session = sessionFactory.getCurrentSession();
+        car.setActive(false);
+        session.update(car);
+        return true;
+    }
+
+    @Override
+    public boolean activateCar(Car car) {
+        Session session = sessionFactory.getCurrentSession();
+        car.setActive(true);
+        session.update(car);
+        return true;
     }
 }

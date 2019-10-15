@@ -10,8 +10,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
@@ -29,7 +27,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void registerGlobalAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         auth.userDetailsService(userDetailService)
                 .passwordEncoder(passwordEncoder());
     }
@@ -73,8 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true);
     }
     @Bean
-    public static PasswordEncoder passwordEncoder() {
-        PasswordEncoder encoder = new org.springframework.security.crypto.password.MessageDigestPasswordEncoder("MD5");
-        return encoder;
+    private static PasswordEncoder passwordEncoder() {
+        return new org.springframework.security.crypto.password.MessageDigestPasswordEncoder("MD5");
     }
 }
