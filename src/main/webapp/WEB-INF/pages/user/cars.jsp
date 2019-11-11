@@ -35,7 +35,7 @@
     </c:forEach>
 </table>
 <c:forEach begin="1" end="${pagesCount}" step="1" varStatus="i">
-    <c:url value="/cars" var="url">
+    <c:url value="/user/cars" var="url">
         <c:param name="page" value="${i.index}"/>
     </c:url>
     <a href="${url}">${i.index}</a>

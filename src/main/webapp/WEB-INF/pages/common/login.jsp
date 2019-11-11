@@ -14,6 +14,12 @@
 
     <c:url value="/j_spring_security_check" var="loginUrl"/>
 
+
+    <c:if test="${registration != null }">
+        ${registration};
+    </c:if>
+
+
     <form action="${loginUrl}" method="post">
         <h2>Please sign in</h2>
         <input type="text" name="j_username" placeholder="Login" required autofocus value="">

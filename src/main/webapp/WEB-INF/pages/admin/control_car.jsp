@@ -49,15 +49,15 @@
     </c:forEach>
 </table>
 <c:forEach begin="1" end="${pagesCount}" step="1" varStatus="i">
-    <c:url value="/control_car" var="url">
+    <c:url value="/admin/control_car" var="url">
         <c:param name="page" value="${i.index}"/>
     </c:url>
     <a href="${url}">${i.index}</a>
 </c:forEach>
 
-<h2><a href="/spring-web-project/add_car">Добавить автомобиль</a></h2>
+<h2><a href="/spring-web-project/admin/add_car">Добавить автомобиль</a></h2>
 <br>
-<h2><a href="/spring-web-project/control_user">Управление пользователями</a></h2>
+<h2><a href="/spring-web-project/admin/control_user">Управление пользователями</a></h2>
 
 <h2><a href="/spring-web-project/">На главную</a></h2>
 </body>

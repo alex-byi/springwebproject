@@ -13,8 +13,8 @@
 <div>
     <sec:authorize access="!isAuthenticated()">
         <p>
-        <h2><a href="<c:url value="/login" />">Войти</a></h2></p>
-        <h2><a href="/spring-web-project/register">Зарегистрироваться</a></h2>
+        <h2><a href="<c:url value="/common/login" />">Войти</a></h2></p>
+        <h2><a href="/spring-web-project/common/register">Зарегистрироваться</a></h2>
     </sec:authorize>
 
     <sec:authorize access="hasAuthority('ADMIN')">
@@ -24,9 +24,9 @@
         </h2>
         </p>
         <p>
-        <h2><a href="/spring-web-project/control_car">Управление Автомобилями</a></h2>  </p>
+        <h2><a href="/spring-web-project/admin/control_car">Управление Автомобилями</a></h2>  </p>
         <p>
-        <h2><a href="/spring-web-project/control_user">Управление пользователями</a></h2></p>
+        <h2><a href="/spring-web-project/admin/control_user">Управление пользователями</a></h2></p>
         <p>
         <h2><a href="<c:url value="/logout" />">Выйти</a></h2></p>
         <br>
@@ -65,7 +65,7 @@
         </h2>
         </p>
         <p>
-        <h2><a href="/spring-web-project/cars">Go to cars</a></h2>  </p>
+        <h2><a href="/spring-web-project/user/cars">Go to cars</a></h2>  </p>
         <p>
         <p>
         <h2><a href="<c:url value="/logout" />">Выйти</a></h2></p>

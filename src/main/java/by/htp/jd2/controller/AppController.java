@@ -32,40 +32,40 @@ public class AppController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/cars", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/cars", method = RequestMethod.GET)
     public ModelAndView allCars(@RequestParam(defaultValue = "1") int page) {
         List<Car> cars = carService.getAllCars(page);
         int carCount = carService.carCount();
         int pagesCount = (carCount + 3) / 4;
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("cars");
+        modelAndView.setViewName("user/cars");
         modelAndView.addObject("cars", cars);
         modelAndView.addObject("pagesCount", pagesCount);
         modelAndView.addObject("carsCount", carCount);
         return modelAndView;
     }
 
-    @RequestMapping(value = "/control_car", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/control_car", method = RequestMethod.GET)
     public ModelAndView controlCars(@RequestParam(defaultValue = "1") int page) {
         List<Car> cars = carService.getAllCars(page);
         int carCount = carService.carCount();
         int pagesCount = (carCount + 3) / 4;
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("control_car");
+        modelAndView.setViewName("admin/control_car");
         modelAndView.addObject("cars", cars);
         modelAndView.addObject("pagesCount", pagesCount);
         modelAndView.addObject("carsCount", carCount);
         return modelAndView;
     }
 
-    @RequestMapping(value = "/deactivateCar")
+    @RequestMapping(value = "/admin/deactivateCar")
     public ModelAndView deactivateCar(@RequestParam int idCar) {
         Car car = carService.getCarById(idCar);
         carService.deactivateCar(car);
         return controlCars(1);
     }
 
-    @RequestMapping(value = "/activateCar")
+    @RequestMapping(value = "/admin/activateCar")
     public ModelAndView activateCar(@RequestParam int idCar) {
         Car car = carService.getCarById(idCar);
         carService.activateCar(car);
@@ -75,19 +75,19 @@ public class AppController {
     @RequestMapping(value = "/getUser")
     public ModelAndView getUser(@RequestParam("userLogin") String login) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("index");
+        modelAndView.setViewName("common/index");
         User userLogin = userService.getUser(login);
         modelAndView.addObject("userLogin", userLogin);
         return modelAndView;
     }
 
-    @RequestMapping(value = "/control_user", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/control_user", method = RequestMethod.GET)
     public ModelAndView allUsers(@RequestParam(defaultValue = "1") int page) {
         List<User> users = userService.getAllUsers(page);
         int userCount = userService.userCount();
         int pagesCount = (userCount + 3) / 4;
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("control_user");
+        modelAndView.setViewName("admin/control_user");
         modelAndView.addObject("users", users);
         modelAndView.addObject("pagesCount", pagesCount);
         modelAndView.addObject("usersCount", userCount);
@@ -97,41 +97,41 @@ public class AppController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("index");
+        modelAndView.setViewName("common/index");
         return modelAndView;
     }
 
-    @RequestMapping(value = "/add_car", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/add_car", method = RequestMethod.GET)
     public ModelAndView addCarPage() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("add_car");
+        modelAndView.setViewName("admin/add_car");
         return modelAndView;
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    @RequestMapping(value = "/common/register", method = RequestMethod.GET)
     public ModelAndView registerPage() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("user", new User());
-        modelAndView.setViewName("register");
+        modelAndView.setViewName("common/register");
         return modelAndView;
     }
 
-    @RequestMapping(value = "/addUser")
+    @RequestMapping(value = "/common/addUser")
     public ModelAndView addUser(@ModelAttribute("user") User user) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("authPage");
+        modelAndView.setViewName("common/login");
         user.setRole("USER");
         userService.addUser(user);
         modelAndView.addObject("registration", "Registration OK");
-        modelAndView.addObject("user", user);
+//        modelAndView.addObject("user", user);
         return modelAndView;
     }
 
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    @RequestMapping(value = "/common/login", method = RequestMethod.GET)
     public ModelAndView login() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("login");
+        modelAndView.setViewName("common/login");
         return modelAndView;
     }
 

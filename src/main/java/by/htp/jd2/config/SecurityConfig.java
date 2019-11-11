@@ -39,16 +39,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // указываем правила запросов
                 // по которым будет определятся доступ к ресурсам и остальным данным
                 .authorizeRequests()
-                .antMatchers("/cars").authenticated()
-                .antMatchers("/**").hasAuthority("ADMIN")
-                .antMatchers("/register").permitAll()
+                .antMatchers("/admin/**").hasAuthority("ADMIN")
+                .antMatchers("/user/**").hasAuthority("USER")
+                .antMatchers("/common/**").permitAll()
                 .antMatchers("/").permitAll()
                 .and()
                 .formLogin();
 
         http.formLogin()
                 // указываем страницу с формой логина
-                .loginPage("/login")
+                .loginPage("/common/login")
                 // указываем action с формы логина
                 .loginProcessingUrl("/j_spring_security_check")
                 // указываем URL при неудачном логине
