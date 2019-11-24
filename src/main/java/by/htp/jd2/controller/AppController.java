@@ -1,8 +1,12 @@
 package by.htp.jd2.controller;
 
 import by.htp.jd2.entity.Car;
+import by.htp.jd2.entity.Crash;
+import by.htp.jd2.entity.Order;
 import by.htp.jd2.entity.User;
 import by.htp.jd2.service.CarService;
+import by.htp.jd2.service.CrashService;
+import by.htp.jd2.service.OrderService;
 import by.htp.jd2.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +34,20 @@ public class AppController {
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+
+    private OrderService orderService;
+
+    @Autowired
+    public void setOrderService(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
+    private CrashService crashService;
+
+    @Autowired
+    public void setCrashService(CrashService crashService) {
+        this.crashService = crashService;
     }
 
     @RequestMapping(value = "/user/cars", method = RequestMethod.GET)
@@ -134,5 +152,33 @@ public class AppController {
         modelAndView.setViewName("common/login");
         return modelAndView;
     }
+
+    @RequestMapping(value = "/admin/control_orders", method = RequestMethod.GET)
+    public ModelAndView controlOrders(@RequestParam(defaultValue = "1") int page) {
+        List<Order> orders = orderService.getAllOrders(page);
+        int orderCount = orderService.orderCount();
+        int pagesCount = (orderCount + 3) / 4;
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("admin/control_orders");
+        modelAndView.addObject("orders", orders);
+        modelAndView.addObject("pagesCount", pagesCount);
+        modelAndView.addObject("ordersCount", orderCount);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/admin/control_crashs", method = RequestMethod.GET)
+    public ModelAndView controlCrashs(@RequestParam(defaultValue = "1") int page) {
+        List<Crash> crashs = crashService.getAllCrashs(page);
+        int crashsCount = crashService.crashCount();
+        int pagesCount = (crashsCount + 3) / 4;
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("admin/control_crashs");
+        modelAndView.addObject("crashs", crashs);
+        modelAndView.addObject("pagesCount", pagesCount);
+        modelAndView.addObject("crashsCount", crashsCount);
+        return modelAndView;
+    }
+
+
 
 }
