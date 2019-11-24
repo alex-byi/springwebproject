@@ -48,4 +48,10 @@ public class CarServiceImpl implements CarService {
     public boolean activateCar(Car car) {
         return carDao.activateCar(car);
     }
+
+    @Override
+    @Transactional
+    public void addCar(Car car) {
+        carDao.addCar(car);
+    }
 }

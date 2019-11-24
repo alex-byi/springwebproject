@@ -1,9 +1,11 @@
 package by.htp.jd2.dao.impl;
 
 import by.htp.jd2.dao.OrderDao;
+import by.htp.jd2.entity.Crash;
 import by.htp.jd2.entity.Order;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -29,5 +31,37 @@ public class SqlOrderDao implements OrderDao {
     public int orderCount() {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select count(*) from Order", Number.class).getSingleResult().intValue();
+    }
+
+    @Override
+    public void completeOrder(Order order) {
+        Session session = sessionFactory.getCurrentSession();
+        order.setComplete(true);
+        session.update(order);
+
+    }
+
+    @Override
+    public void cancelOrder(Order order, String reason) {
+        Session session = sessionFactory.getCurrentSession();
+        order.setCanceled(true);
+        order.setRejectReason(reason);
+        session.update(order);
+    }
+
+    @Override
+    public Order getOrderById(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Order where id = :paramName");
+        query.setParameter("paramName", id);
+        return (Order) query.getSingleResult();
+    }
+
+    @Override
+    public void setCrash(Order order, Crash crash) {
+        Session session = sessionFactory.getCurrentSession();
+        order.setCrash(true);
+        order.setCrashBill(crash.getId());
+        session.update(order);
     }
 }

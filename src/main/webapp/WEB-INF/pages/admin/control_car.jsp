@@ -56,9 +56,15 @@
 </c:forEach>
 
 <h2><a href="/spring-web-project/admin/add_car">Добавить автомобиль</a></h2>
+<p>
+<h2><a href="/spring-web-project/admin/control_user">Управление пользователями</a></h2></p>
+<p>
+<h2><a href="/spring-web-project/admin/control_orders">Управление заказами</a></h2></p>
+<p>
+<h2><a href="/spring-web-project/admin/control_crashs">Управление дополнительными счетами</a></h2></p>
+<p>
+<h2><a href="<c:url value="/logout" />">Выйти</a></h2></p>
 <br>
-<h2><a href="/spring-web-project/admin/control_user">Управление пользователями</a></h2>
-
 <h2><a href="/spring-web-project/">На главную</a></h2>
 </body>
 </html>

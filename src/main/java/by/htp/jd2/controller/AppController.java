@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @Controller
@@ -112,6 +116,28 @@ public class AppController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/admin/changeRole")
+    public ModelAndView changeRole(@RequestParam int idUser) {
+        User user = userService.getUserById(idUser);
+        userService.changeRole(user);
+        return new ModelAndView("redirect:/admin/control_user");
+    }
+
+    @RequestMapping(value = "/admin/changeActivity")
+    public ModelAndView changeActivity(@RequestParam int idUser) {
+        User user = userService.getUserById(idUser);
+        userService.changeActivity(user);
+        return new ModelAndView("redirect:/admin/control_user");
+    }
+
+    @RequestMapping(value = "/admin/addCash")
+    public ModelAndView addCash(@RequestParam int idUser, int cash) {
+        User user = userService.getUserById(idUser);
+        userService.addCash(user, cash);
+        return new ModelAndView("redirect:/admin/control_user");
+    }
+
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView();
@@ -122,8 +148,16 @@ public class AppController {
     @RequestMapping(value = "/admin/add_car", method = RequestMethod.GET)
     public ModelAndView addCarPage() {
         ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("car", new Car());
         modelAndView.setViewName("admin/add_car");
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/admin/addCar")
+    public ModelAndView addCar(@ModelAttribute("car") Car car) {
+//        ModelAndView modelAndView = new ModelAndView();
+        carService.addCar(car);
+        return controlCars(1);
     }
 
     @RequestMapping(value = "/common/register", method = RequestMethod.GET)
@@ -135,13 +169,15 @@ public class AppController {
     }
 
     @RequestMapping(value = "/common/addUser")
-    public ModelAndView addUser(@ModelAttribute("user") User user) {
+    public ModelAndView addUser(@ModelAttribute("user") User user) throws NoSuchAlgorithmException {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("common/login");
         user.setRole("USER");
+        MessageDigest md5 = MessageDigest.getInstance("MD5");
+        md5.update(StandardCharsets.UTF_8.encode(user.getPassword()));
+        user.setPassword(String.format("%032x", new BigInteger(1, md5.digest())));
         userService.addUser(user);
         modelAndView.addObject("registration", "Registration OK");
-//        modelAndView.addObject("user", user);
         return modelAndView;
     }
 
@@ -166,6 +202,41 @@ public class AppController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/admin/completeOrder")
+    public ModelAndView completeOrder(@RequestParam int idOrder) {
+        Order order = orderService.getOrderById(idOrder);
+        orderService.completeOrder(order);
+        return new ModelAndView("redirect:/admin/control_orders");
+    }
+
+    @RequestMapping(value = "/admin/cancelOrder")
+    public ModelAndView cancelOrder(@RequestParam int idOrder, String reason) {
+        Order order = orderService.getOrderById(idOrder);
+        orderService.cancelOrder(order, reason);
+        return new ModelAndView("redirect:/admin/control_orders");
+    }
+
+    @RequestMapping(value = "/admin/addCrashPage")
+    public ModelAndView addCrashPage(@RequestParam int idUser, int idCar, int idOrder) {
+        ModelAndView modelAndView = new ModelAndView();
+        Crash crash = new Crash();
+        crash.setIdUser(idUser);
+        crash.setIdCar(idCar);
+        modelAndView.addObject("crash", crash);
+        modelAndView.addObject("idOrder", idOrder);
+        modelAndView.setViewName("admin/add_crash");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/admin/addCrash")
+    public ModelAndView addCrash(@ModelAttribute("crash") Crash crash, int idOrder) {
+        ModelAndView modelAndView = new ModelAndView();
+        crashService.addCrash(crash);
+        orderService.setCrash(orderService.getOrderById(idOrder), crash);
+        return new ModelAndView("redirect:/admin/control_orders");
+    }
+
+
     @RequestMapping(value = "/admin/control_crashs", method = RequestMethod.GET)
     public ModelAndView controlCrashs(@RequestParam(defaultValue = "1") int page) {
         List<Crash> crashs = crashService.getAllCrashs(page);
@@ -178,7 +249,6 @@ public class AppController {
         modelAndView.addObject("crashsCount", crashsCount);
         return modelAndView;
     }
-
 
 
 }

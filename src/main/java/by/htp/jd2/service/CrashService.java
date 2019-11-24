@@ -10,4 +10,8 @@ public interface CrashService {
 
     int crashCount();
 
+    Crash getCrashById(int id);
+
+    void addCrash(Crash crash);
+
 }

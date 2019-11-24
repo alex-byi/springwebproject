@@ -9,7 +9,6 @@
 </head>
 <body>
 <h1>This is REGISTRATION</h1>
-<!--<h2><a href = "/spring-web-project/">Go to index</a></h2>-->
 
 
 <spring:form method="post"  modelAttribute="user" action="addUser">
@@ -23,8 +22,6 @@
     <spring:button>Next Page</spring:button>
 
 </spring:form>
-
-
 
 </body>
 </html>

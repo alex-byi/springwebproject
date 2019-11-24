@@ -15,7 +15,6 @@
     <tr>
         <th>id</th>
         <th>login</th>
-        <th>password</th>
         <th>role</th>
         <th>active</th>
         <th>passportnumber</th>
@@ -23,19 +22,36 @@
         <th>address</th>
         <th>email</th>
         <th>cash</th>
+        <th>Пополнить счет</th>
     </tr>
     <c:forEach var="user" items="${users}">
         <tr>
             <td>${user.id}</td>
             <td>${user.login}</td>
-            <td>${user.password}</td>
-            <td>${user.role}</td>
-            <td>${user.active}</td>
+            <td>
+                <form method="post" action="changeRole">
+                    <input type="hidden" name=idUser value="${user.id}"/>
+                    <input type="submit" value="${user.role}" onclick="return confirm('are u shure?')">
+                </form>
+            </td>
+            <td>
+                <form method="post" action="changeActivity">
+                    <input type="hidden" name=idUser value="${user.id}"/>
+                    <input type="submit" value="${user.active}" onclick="return confirm('are u shure?')">
+                </form>
+            </td>
             <td>${user.passportNumber}</td>
             <td>${user.fullName}</td>
             <td>${user.address}</td>
             <td>${user.email}</td>
             <td>${user.cash}</td>
+            <td>
+                <form method="post" action="addCash">
+                    <input type="hidden" name=idUser value="${user.id}"/>
+                    <input type="number" name=cash value=""/>
+                    <input type="submit" value="Пополнить" onclick="return confirm('are u shure?')">
+                </form>
+            </td>
         </tr>
     </c:forEach>
 </table>
@@ -46,8 +62,15 @@
     <a href="${url}">${i.index}</a>
 </c:forEach>
 
-
-<h2><a href="/spring-web-project/admin/control_car">На страницу со всеми автомобилями</a></h2>
+<p>
+<h2><a href="/spring-web-project/admin/control_car">Управление Автомобилями</a></h2>  </p>
+<p>
+<h2><a href="/spring-web-project/admin/control_orders">Управление заказами</a></h2></p>
+<p>
+<h2><a href="/spring-web-project/admin/control_crashs">Управление дополнительными счетами</a></h2></p>
+<p>
+<h2><a href="<c:url value="/logout" />">Выйти</a></h2></p>
+<br>
 <h2><a href="/spring-web-project/">На главную</a></h2>
 </body>
 </html>

@@ -25,7 +25,7 @@
         <th>dayCol</th>
         <th>iscanceled</th>
         <th>iscomplete</th>
-        <th>reject_reason</th>
+        <th>Добавить доп.счет</th>
 
     </tr>
     <c:forEach var="order" items="${orders}">
@@ -41,9 +41,33 @@
             <td>${order.idUser}</td>
             <td>${order.amount}</td>
             <td>${order.dayCol}</td>
-            <td>${order.canceled}</td>
-            <td>${order.complete}</td>
-            <td>${order.rejectReason}</td>
+            <td>
+                <c:if test="${order.canceled == false && order.complete == false}">
+                    <form method="post" action="cancelOrder">
+                        <input type="hidden" name=idOrder value="${order.id}"/>
+                        <input type="text" name=reason value=""/>
+                        <input type="submit" value="Отменить" onclick="return confirm('are u shure?')">
+                    </form>
+                </c:if>
+                <c:if test="${order.canceled == true}"> Отменен с причиной: ${order.rejectReason}</c:if>
+            </td>
+            <td>
+                <c:if test="${order.canceled == false && order.complete == false}">
+                    <form method="post" action="completeOrder">
+                        <input type="hidden" name=idOrder value="${order.id}"/>
+                        <input type="submit" value="Завершить" onclick="return confirm('are u shure?')">
+                    </form>
+                </c:if>
+                <c:if test="${order.complete == true}"> Завершен</c:if>
+            </td>
+            <td>
+                <form method="post" action="addCrashPage">
+                    <input type="hidden" name=idUser value="${order.idUser}"/>
+                    <input type="hidden" name=idCar value="${order.idCar}"/>
+                    <input type="hidden" name=idOrder value="${order.id}"/>
+                    <input type="submit" value="Добавить счет" onclick="return confirm('are u shure?')">
+                </form>
+            </td>
         </tr>
     </c:forEach>
 </table>
@@ -54,9 +78,15 @@
     <a href="${url}">${i.index}</a>
 </c:forEach>
 
+<p>
+<h2><a href="/spring-web-project/admin/control_car">Управление Автомобилями</a></h2>  </p>
+<p>
+<h2><a href="/spring-web-project/admin/control_user">Управление пользователями</a></h2></p>
+<p>
+<h2><a href="/spring-web-project/admin/control_crashs">Управление дополнительными счетами</a></h2></p>
+<p>
+<h2><a href="<c:url value="/logout" />">Выйти</a></h2></p>
 <br>
-<h2><a href="/spring-web-project/admin/control_user">Управление пользователями</a></h2>
-
 <h2><a href="/spring-web-project/">На главную</a></h2>
 </body>
 </html>

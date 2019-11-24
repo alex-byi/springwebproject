@@ -30,4 +30,14 @@ public class CrashServiceImpl implements CrashService {
     public int crashCount() {
         return crashDao.crashCount();
     }
+
+    @Override
+    public Crash getCrashById(int id) {
+        return crashDao.getCrashById(id);
+    }
+
+    @Override
+    public void addCrash(Crash crash) {
+        crashDao.addCrash(crash);
+    }
 }

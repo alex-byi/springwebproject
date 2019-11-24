@@ -43,4 +43,28 @@ public class UserServiceImpl implements UserService {
         return userDao.getUser(login);
     }
 
+    @Override
+    @Transactional
+    public void changeRole(User user) {
+        userDao.changeRole(user);
+    }
+
+    @Override
+    @Transactional
+    public User getUserById(int id) {
+        return userDao.getUserById(id);
+    }
+
+    @Override
+    @Transactional
+    public void changeActivity(User user) {
+        userDao.changeActivity(user);
+    }
+
+    @Override
+    @Transactional
+    public void addCash(User user, int cash) {
+        userDao.addCash(user,cash);
+    }
+
 }

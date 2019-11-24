@@ -2,8 +2,10 @@ package by.htp.jd2.dao.impl;
 
 import by.htp.jd2.dao.CrashDao;
 import by.htp.jd2.entity.Crash;
+import by.htp.jd2.entity.Order;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -31,4 +33,18 @@ public class SqlCrashDao implements CrashDao {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select count(*) from Crash", Number.class).getSingleResult().intValue();
     }
+
+    @Override
+    public Crash getCrashById(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Crash where id = :paramName");
+        query.setParameter("paramName", id);
+        return (Crash) query.getSingleResult();
+    }
+
+    @Override
+    public void addCrash(Crash crash) {
+        sessionFactory.getCurrentSession().save(crash);
+    }
+
 }

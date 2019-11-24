@@ -55,4 +55,9 @@ public class SqlCarDao implements CarDao {
         session.update(car);
         return true;
     }
+
+    @Override
+    public void addCar(Car car) {
+        sessionFactory.getCurrentSession().save(car);
+    }
 }
