@@ -84,4 +84,18 @@ public class SqlUserDao implements UserDao {
         user.setCash(user.getCash()+cash);
         session.update(user);
     }
+
+    @Override
+    public void changeEmail(User user, String email) {
+        Session session = sessionFactory.getCurrentSession();
+        user.setEmail(email);
+        session.update(user);
+    }
+
+    @Override
+    public void changePassword(User user, String password) {
+        Session session = sessionFactory.getCurrentSession();
+        user.setPassword(password);
+        session.update(user);
+    }
 }

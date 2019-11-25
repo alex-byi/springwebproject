@@ -9,9 +9,9 @@ import by.htp.jd2.service.CrashService;
 import by.htp.jd2.service.OrderService;
 import by.htp.jd2.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ConcurrentModel;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -56,6 +56,8 @@ public class AppController {
         this.crashService = crashService;
     }
 
+
+    //CARS/////////////////////////////////////////////////////
     @RequestMapping(value = "/user/cars", method = RequestMethod.GET)
     public ModelAndView allCars(@RequestParam(defaultValue = "1") int page) {
         List<Car> cars = carService.getAllCars(page);
@@ -96,10 +98,28 @@ public class AppController {
         return controlCars(1);
     }
 
-    @RequestMapping(value = "/getUser")
+
+    @RequestMapping(value = "/admin/add_car", method = RequestMethod.GET)
+    public ModelAndView addCarPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("car", new Car());
+        modelAndView.setViewName("admin/add_car");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/admin/addCar")
+    public ModelAndView addCar(@ModelAttribute("car") Car car) {
+        carService.addCar(car);
+        return controlCars(1);
+    }
+
+
+    //Control USERS//////////////////////////////////////////////////////////
+
+    @RequestMapping(value = "admin/getUser")
     public ModelAndView getUser(@RequestParam("userLogin") String login) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("common/index");
+        modelAndView.setViewName("admin/control_user");
         User userLogin = userService.getUser(login);
         modelAndView.addObject("userLogin", userLogin);
         return modelAndView;
@@ -139,35 +159,40 @@ public class AppController {
         return new ModelAndView("redirect:/admin/control_user");
     }
 
-
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ModelAndView index() {
+    @RequestMapping(value = "/admin/profile", method = RequestMethod.GET)
+    public ModelAndView adminProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getUser(authentication.getName());
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("common/index");
+        modelAndView.setViewName("admin/profile");
+        modelAndView.addObject("user", user);
         return modelAndView;
     }
 
-    @RequestMapping(value = "/admin/add_car", method = RequestMethod.GET)
-    public ModelAndView addCarPage() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("car", new Car());
-        modelAndView.setViewName("admin/add_car");
-        return modelAndView;
+    @RequestMapping(value = "/admin/changeEmail")
+    public ModelAndView changeEmail(@RequestParam int idUser, String email) {
+        userService.changeEmail(userService.getUserById(idUser), email);
+        return new ModelAndView("redirect:/admin/profile");
     }
 
-    @RequestMapping(value = "/admin/addCar")
-    public ModelAndView addCar(@ModelAttribute("car") Car car) {
-        carService.addCar(car);
-        return controlCars(1);
+    @RequestMapping(value = "/admin/changePassword")
+    public ModelAndView changePassword(@RequestParam int idUser, String oldPassword, String newPassword) throws NoSuchAlgorithmException {
+        User user = userService.getUserById(idUser);
+
+        MessageDigest md5 = MessageDigest.getInstance("MD5");
+        md5.update(StandardCharsets.UTF_8.encode(oldPassword));
+        String oldFormPassword = String.format("%032x", new BigInteger(1, md5.digest()));
+
+        if (oldFormPassword.equals(user.getPassword())) {
+            md5.update(StandardCharsets.UTF_8.encode(newPassword));
+            String password = String.format("%032x", new BigInteger(1, md5.digest()));
+            userService.changePassword(user, password);
+        }
+        return new ModelAndView("redirect:/admin/profile");
     }
 
-    @RequestMapping(value = "/common/register", method = RequestMethod.GET)
-    public ModelAndView registerPage() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("user", new User());
-        modelAndView.setViewName("common/register");
-        return modelAndView;
-    }
+
+    //COMMON///////////////////////////////////////////////////////////////////////////
 
     @RequestMapping(value = "/common/addUser")
     public ModelAndView addUser(@ModelAttribute("user") User user) throws NoSuchAlgorithmException {
@@ -183,6 +208,25 @@ public class AppController {
     }
 
 
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public ModelAndView index() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("common/index");
+        return modelAndView;
+    }
+
+
+    @RequestMapping(value = "/common/register", method = RequestMethod.GET)
+    public ModelAndView registerPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("user", new User());
+        modelAndView.setViewName("common/register");
+        return modelAndView;
+    }
+
+
+
+
     @RequestMapping(value = "/common/login", method = RequestMethod.GET)
     public ModelAndView login() {
         ModelAndView modelAndView = new ModelAndView();
@@ -190,6 +234,8 @@ public class AppController {
         return modelAndView;
     }
 
+
+    //CONTROL ORDERS///////////////////////////////////////////////////////////////////////
     @RequestMapping(value = "/admin/control_orders", method = RequestMethod.GET)
     public ModelAndView controlOrders(@RequestParam(defaultValue = "1") int page) {
         List<Order> orders = orderService.getAllOrders(page);

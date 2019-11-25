@@ -21,4 +21,8 @@ public interface UserService {
     void changeActivity(User user);
 
     void addCash(User user, int cash);
+
+    void  changeEmail(User user, String email);
+
+    void  changePassword(User user, String password);
 }

@@ -9,45 +9,40 @@
 
 <body>
 
+<div>
+    <c:import url="menu_admin.jsp" charEncoding="utf-8"/>
+</div>
+
 <h2>ALL CRASHES PAGE</h2>
-<table>
-    <tr>
-        <th>idcrashbill</th>
-        <th>description</th>
-        <th>amount</th>
-        <th>idcar</th>
-        <th>iduser</th>
-        <th>iscomplete</th>
 
-    </tr>
-    <c:forEach var="crash" items="${crashs}">
+<div>
+    <table>
         <tr>
-            <td>${crash.id}</td>
-            <td>${crash.description}</td>
-            <td>${crash.amount}</td>
-            <td>${crash.idCar}</td>
-            <td>${crash.idUser}</td>
-            <td>${crash.complete}</td>
-        </tr>
-    </c:forEach>
-</table>
-<c:forEach begin="1" end="${pagesCount}" step="1" varStatus="i">
-    <c:url value="/admin/control_crashs" var="url">
-        <c:param name="page" value="${i.index}"/>
-    </c:url>
-    <a href="${url}">${i.index}</a>
-</c:forEach>
+            <th>idcrashbill</th>
+            <th>description</th>
+            <th>amount</th>
+            <th>idcar</th>
+            <th>iduser</th>
+            <th>iscomplete</th>
 
-<br>
-<p>
-<h2><a href="/spring-web-project/admin/control_car">Управление Автомобилями</a></h2>  </p>
-<p>
-<h2><a href="/spring-web-project/admin/control_user">Управление пользователями</a></h2></p>
-<p>
-<h2><a href="/spring-web-project/admin/control_orders">Управление заказами</a></h2></p>
-<p>
-<h2><a href="<c:url value="/logout" />">Выйти</a></h2></p>
-<br>
-<h2><a href="/spring-web-project/">На главную</a></h2>
+        </tr>
+        <c:forEach var="crash" items="${crashs}">
+            <tr>
+                <td>${crash.id}</td>
+                <td>${crash.description}</td>
+                <td>${crash.amount}</td>
+                <td>${crash.idCar}</td>
+                <td>${crash.idUser}</td>
+                <td>${crash.complete}</td>
+            </tr>
+        </c:forEach>
+    </table>
+    <c:forEach begin="1" end="${pagesCount}" step="1" varStatus="i">
+        <c:url value="/admin/control_crashs" var="url">
+            <c:param name="page" value="${i.index}"/>
+        </c:url>
+        <a href="${url}">${i.index}</a>
+    </c:forEach>
+</div>
 </body>
 </html>

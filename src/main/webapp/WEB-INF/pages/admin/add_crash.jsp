@@ -1,7 +1,6 @@
 <%@page language="java" contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags/form" %>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html xmlns:spring="http://www.w3.org/1999/html">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
@@ -15,7 +14,9 @@
     <input type="hidden" name=idCar value="${idCar}"/>
     <input type="hidden" name=idOrder value="${idOrder}"/>
     <input type="text" name=description value=""/>
+    <br>
     <input type="number" name=amount value=""/>
+    <br>
     <input type="submit" value="Добавить счет" onclick="return confirm('are u shure?')">
 </form>
 

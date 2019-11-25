@@ -64,7 +64,20 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void addCash(User user, int cash) {
-        userDao.addCash(user,cash);
+        userDao.addCash(user, cash);
+    }
+
+    @Override
+    @Transactional
+    public void changeEmail(User user, String email) {
+        userDao.changeEmail(user, email);
+    }
+
+    @Override
+    @Transactional
+    public void changePassword(User user, String password) {
+        userDao.changePassword(user,password);
+
     }
 
 }
