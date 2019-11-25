@@ -52,6 +52,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public void setCrash(Order order, Crash crash) {
         orderDao.setCrash(order, crash);
     }

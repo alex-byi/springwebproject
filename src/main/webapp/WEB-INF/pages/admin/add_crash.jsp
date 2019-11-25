@@ -10,19 +10,14 @@
 <body>
 <h1>This is ADD_CRash_PAGE</h1>
 
-
-
-<spring:form method="post" modelAttribute="crash" action="addCrash">
-
-    Описание:
-    <spring:input path="description"/>
-    <br/>
-    Сумма:
-    <spring:input path="amount"/>
-    <br/>
-    <spring:button>Добавить</spring:button>
-
-</spring:form>
+<form method="post" action="addCrash">
+    <input type="hidden" name=idUser value="${idUser}"/>
+    <input type="hidden" name=idCar value="${idCar}"/>
+    <input type="hidden" name=idOrder value="${idOrder}"/>
+    <input type="text" name=description value=""/>
+    <input type="number" name=amount value=""/>
+    <input type="submit" value="Добавить счет" onclick="return confirm('are u shure?')">
+</form>
 
 
 <a href="javascript:history.back()">Назад</a>

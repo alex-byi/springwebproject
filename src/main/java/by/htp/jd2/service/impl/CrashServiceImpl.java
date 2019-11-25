@@ -32,11 +32,13 @@ public class CrashServiceImpl implements CrashService {
     }
 
     @Override
+    @Transactional
     public Crash getCrashById(int id) {
         return crashDao.getCrashById(id);
     }
 
     @Override
+    @Transactional
     public void addCrash(Crash crash) {
         crashDao.addCrash(crash);
     }

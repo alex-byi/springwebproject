@@ -10,6 +10,8 @@ import by.htp.jd2.service.OrderService;
 import by.htp.jd2.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ConcurrentModel;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -155,7 +157,6 @@ public class AppController {
 
     @RequestMapping(value = "/admin/addCar")
     public ModelAndView addCar(@ModelAttribute("car") Car car) {
-//        ModelAndView modelAndView = new ModelAndView();
         carService.addCar(car);
         return controlCars(1);
     }
@@ -219,18 +220,21 @@ public class AppController {
     @RequestMapping(value = "/admin/addCrashPage")
     public ModelAndView addCrashPage(@RequestParam int idUser, int idCar, int idOrder) {
         ModelAndView modelAndView = new ModelAndView();
-        Crash crash = new Crash();
-        crash.setIdUser(idUser);
-        crash.setIdCar(idCar);
-        modelAndView.addObject("crash", crash);
+        modelAndView.addObject("idUser", idUser);
+        modelAndView.addObject("idCar", idCar);
         modelAndView.addObject("idOrder", idOrder);
         modelAndView.setViewName("admin/add_crash");
         return modelAndView;
     }
 
     @RequestMapping(value = "/admin/addCrash")
-    public ModelAndView addCrash(@ModelAttribute("crash") Crash crash, int idOrder) {
-        ModelAndView modelAndView = new ModelAndView();
+    public ModelAndView addCrash(@RequestParam int idUser, int idCar, int idOrder, int amount, String description) {
+        Crash crash = new Crash();
+        crash.setIdCar(idCar);
+        crash.setIdUser(idUser);
+        crash.setAmount(amount);
+        crash.setDescription(description);
+        crash.setComplete(false);
         crashService.addCrash(crash);
         orderService.setCrash(orderService.getOrderById(idOrder), crash);
         return new ModelAndView("redirect:/admin/control_orders");
