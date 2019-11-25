@@ -27,7 +27,7 @@ public class SqlCarDao implements CarDao {
     }
 
     @Override
-    public int carCount(){
+    public int carCount() {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("select count(*) from Car", Number.class).getSingleResult().intValue();
     }
@@ -59,5 +59,17 @@ public class SqlCarDao implements CarDao {
     @Override
     public void addCar(Car car) {
         sessionFactory.getCurrentSession().save(car);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Car> getAllAvailableCars(String startDate, String endDate) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createSQLQuery("select * from cars where idcars NOT IN (select cars_idcars from orders " +
+                "where (enddate > :paramName1) OR ((startdate > :paramName2) AND (startdate < :paramName3)))").addEntity(Car.class);
+        query.setParameter("paramName1", startDate);
+        query.setParameter("paramName2", startDate);
+        query.setParameter("paramName3", endDate);
+        return query.list();
     }
 }

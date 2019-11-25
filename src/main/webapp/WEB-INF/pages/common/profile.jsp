@@ -1,6 +1,7 @@
 <%@page language="java" contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 
 <html xmlns:c="http://www.w3.org/1999/html">
 <head>
@@ -21,9 +22,16 @@
 
 </head>
 <body>
+<sec:authorize access="hasAuthority('ADMIN')">
 <div>
-    <c:import url="menu_admin.jsp" charEncoding="utf-8"/>
+    <c:import url="../admin/menu_admin.jsp" charEncoding="utf-8"/>
 </div>
+</sec:authorize>
+<sec:authorize access="hasAuthority('USER')">
+    <div>
+        <c:import url="../user/menu_user.jsp" charEncoding="utf-8"/>
+    </div>
+</sec:authorize>
 <h1>This is PROFILE_PAGE</h1>
 <br>
 <br>

@@ -47,4 +47,20 @@ public class SqlCrashDao implements CrashDao {
         sessionFactory.getCurrentSession().save(crash);
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Crash> getUserCrashes(int userId, int page) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Crash where idUser = :paramName").setFirstResult(4 * (page - 1)).setMaxResults(4);
+        query.setParameter("paramName", userId);
+        return query.list();
+    }
+
+    @Override
+    public int userCrashCount(int userId) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("select count(*) from Crash where idUser = :paramName", Number.class)
+                .setParameter("paramName", userId).getSingleResult().intValue();
+    }
+
 }

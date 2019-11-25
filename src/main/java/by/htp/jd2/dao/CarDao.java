@@ -18,5 +18,7 @@ public interface CarDao {
 
     void addCar(Car car);
 
+    List<Car> getAllAvailableCars(String startDate, String endDate);
+
 
 }

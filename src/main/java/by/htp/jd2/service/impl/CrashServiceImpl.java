@@ -42,4 +42,16 @@ public class CrashServiceImpl implements CrashService {
     public void addCrash(Crash crash) {
         crashDao.addCrash(crash);
     }
+
+    @Override
+    @Transactional
+    public List<Crash> getUserCrashes(int userId, int page) {
+        return crashDao.getUserCrashes(userId, page);
+    }
+
+    @Override
+    @Transactional
+    public int userCrashCount(int userId) {
+        return crashDao.userCrashCount(userId);
+    }
 }

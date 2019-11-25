@@ -17,4 +17,6 @@ public interface CarService {
     boolean activateCar(Car car);
 
     void addCar(Car car);
+
+    List<Car> getAllAvailableCars(String startDate, String endDate);
 }

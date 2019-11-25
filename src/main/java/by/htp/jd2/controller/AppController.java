@@ -22,6 +22,9 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -159,38 +162,6 @@ public class AppController {
         return new ModelAndView("redirect:/admin/control_user");
     }
 
-    @RequestMapping(value = "/admin/profile", method = RequestMethod.GET)
-    public ModelAndView adminProfile() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.getUser(authentication.getName());
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("admin/profile");
-        modelAndView.addObject("user", user);
-        return modelAndView;
-    }
-
-    @RequestMapping(value = "/admin/changeEmail")
-    public ModelAndView changeEmail(@RequestParam int idUser, String email) {
-        userService.changeEmail(userService.getUserById(idUser), email);
-        return new ModelAndView("redirect:/admin/profile");
-    }
-
-    @RequestMapping(value = "/admin/changePassword")
-    public ModelAndView changePassword(@RequestParam int idUser, String oldPassword, String newPassword) throws NoSuchAlgorithmException {
-        User user = userService.getUserById(idUser);
-
-        MessageDigest md5 = MessageDigest.getInstance("MD5");
-        md5.update(StandardCharsets.UTF_8.encode(oldPassword));
-        String oldFormPassword = String.format("%032x", new BigInteger(1, md5.digest()));
-
-        if (oldFormPassword.equals(user.getPassword())) {
-            md5.update(StandardCharsets.UTF_8.encode(newPassword));
-            String password = String.format("%032x", new BigInteger(1, md5.digest()));
-            userService.changePassword(user, password);
-        }
-        return new ModelAndView("redirect:/admin/profile");
-    }
-
 
     //COMMON///////////////////////////////////////////////////////////////////////////
 
@@ -225,13 +196,43 @@ public class AppController {
     }
 
 
-
-
     @RequestMapping(value = "/common/login", method = RequestMethod.GET)
     public ModelAndView login() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("common/login");
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/common/profile", method = RequestMethod.GET)
+    public ModelAndView adminProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getUser(authentication.getName());
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("common/profile");
+        modelAndView.addObject("user", user);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/common/changeEmail")
+    public ModelAndView changeEmail(@RequestParam int idUser, String email) {
+        userService.changeEmail(userService.getUserById(idUser), email);
+        return new ModelAndView("redirect:/common/profile");
+    }
+
+    @RequestMapping(value = "/common/changePassword")
+    public ModelAndView changePassword(@RequestParam int idUser, String oldPassword, String newPassword) throws NoSuchAlgorithmException {
+        User user = userService.getUserById(idUser);
+
+        MessageDigest md5 = MessageDigest.getInstance("MD5");
+        md5.update(StandardCharsets.UTF_8.encode(oldPassword));
+        String oldFormPassword = String.format("%032x", new BigInteger(1, md5.digest()));
+
+        if (oldFormPassword.equals(user.getPassword())) {
+            md5.update(StandardCharsets.UTF_8.encode(newPassword));
+            String password = String.format("%032x", new BigInteger(1, md5.digest()));
+            userService.changePassword(user, password);
+        }
+        return new ModelAndView("redirect:/common/profile");
     }
 
 
@@ -297,6 +298,73 @@ public class AppController {
         modelAndView.addObject("crashs", crashs);
         modelAndView.addObject("pagesCount", pagesCount);
         modelAndView.addObject("crashsCount", crashsCount);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/user/orders", method = RequestMethod.GET)
+    public ModelAndView userOrders(@RequestParam(defaultValue = "1") int page) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getUser(authentication.getName());
+        List<Order> orders = orderService.getUserOrders(user.getId(), page);
+        int orderCount = orderService.userOrderCount(user.getId());
+        int pagesCount = (orderCount + 3) / 4;
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("user/orders");
+        modelAndView.addObject("orders", orders);
+        modelAndView.addObject("pagesCount", pagesCount);
+        modelAndView.addObject("ordersCount", orderCount);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/user/crashes", method = RequestMethod.GET)
+    public ModelAndView userCrashes(@RequestParam(defaultValue = "1") int page) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getUser(authentication.getName());
+        List<Crash> crashes = crashService.getUserCrashes(user.getId(), page);
+        int crashCount = crashService.userCrashCount(user.getId());
+        int pagesCount = (crashCount + 3) / 4;
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("user/crashes");
+        modelAndView.addObject("crashes", crashes);
+        modelAndView.addObject("pagesCount", pagesCount);
+        modelAndView.addObject("crashCount", crashCount);
+        return modelAndView;
+    }
+
+
+    @RequestMapping(value = "/user/new_order", method = RequestMethod.GET)
+    public ModelAndView newOrderUser() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("user/new_order");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/user/newOrdersDates")
+    public ModelAndView newOrdersDates(@RequestParam String dates) throws ParseException {
+
+        String dateStart = dates.substring(0, 10);
+        String dateEnd = dates.substring(13, 23);
+        SimpleDateFormat dateFormat1 = new SimpleDateFormat("MM/dd/yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateS = dateFormat1.parse(dateStart);
+        Date dateE = dateFormat1.parse(dateEnd);
+
+        String startDate = dateFormat.format(dateS);
+        String endDate = dateFormat.format(dateE);
+
+
+        long milliseconds = dateE.getTime() - dateS.getTime();
+        int days = (int) (milliseconds / (24 * 60 * 60 * 1000)) + 1;
+
+        List<Car> availableCars = carService.getAllAvailableCars(startDate, endDate);
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("step", "step2");
+        modelAndView.addObject("availableCars", availableCars);
+        modelAndView.addObject("days", days);
+        modelAndView.addObject("startDate", startDate);
+        modelAndView.addObject("endDate", endDate);
+        modelAndView.setViewName("user/new_order");
         return modelAndView;
     }
 

@@ -18,4 +18,8 @@ public interface OrderService {
     Order getOrderById(int id);
 
     void setCrash(Order order, Crash crash);
+
+    List<Order> getUserOrders(int userId, int page);
+
+    int userOrderCount(int userId);
 }

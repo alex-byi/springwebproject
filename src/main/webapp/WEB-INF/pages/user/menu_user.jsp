@@ -13,7 +13,7 @@
 <div>
     <ul>
         <li><a href="/spring-web-project">Главная</a></li>
-        <li><a href="/spring-web-project/user/profile">Кабинет пользователя</a></li>
+        <li><a href="/spring-web-project/common/profile">Кабинет пользователя</a></li>
         <li><a href="/spring-web-project/user/new_order">Сделать заказ</a></li>
         <li><a href="/spring-web-project/user/orders">Ваши заказы</a></li>
         <li><a href="/spring-web-project/user/crashes">Ваши счета за повреждения</a></li>

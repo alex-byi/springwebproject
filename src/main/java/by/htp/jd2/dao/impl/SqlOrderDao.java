@@ -64,4 +64,21 @@ public class SqlOrderDao implements OrderDao {
         order.setCrashBill(crash.getId());
         session.update(order);
     }
+
+    @Override
+    public int userOrderCount(int userId) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("select count(*) from Order where idUser = :paramName", Number.class)
+                .setParameter("paramName", userId).getSingleResult().intValue();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Order> getUserOrders(int userId, int page) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query = session.createQuery("from Order where idUser = :paramName").setFirstResult(4 * (page - 1)).setMaxResults(4);
+        query.setParameter("paramName", userId);
+        return query.list();
+    }
+
 }

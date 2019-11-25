@@ -14,4 +14,8 @@ public interface CrashService {
 
     void addCrash(Crash crash);
 
+    List<Crash> getUserCrashes(int userId, int page);
+
+    int userCrashCount(int userId);
+
 }

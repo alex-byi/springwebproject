@@ -54,4 +54,10 @@ public class CarServiceImpl implements CarService {
     public void addCar(Car car) {
         carDao.addCar(car);
     }
+
+    @Override
+    @Transactional
+    public List<Car> getAllAvailableCars(String startDate, String endDate) {
+        return carDao.getAllAvailableCars(startDate, endDate);
+    }
 }

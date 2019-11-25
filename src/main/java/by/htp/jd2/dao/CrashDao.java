@@ -14,4 +14,8 @@ public interface CrashDao {
     Crash getCrashById(int id);
 
     void addCrash (Crash crash);
+
+    List<Crash> getUserCrashes(int userId, int page);
+
+    int userCrashCount(int userId);
 }

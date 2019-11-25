@@ -56,4 +56,16 @@ public class OrderServiceImpl implements OrderService {
     public void setCrash(Order order, Crash crash) {
         orderDao.setCrash(order, crash);
     }
+
+    @Override
+    @Transactional
+    public List<Order> getUserOrders(int userId, int page) {
+        return orderDao.getUserOrders(userId,page);
+    }
+
+    @Override
+    @Transactional
+    public int userOrderCount(int userId) {
+        return orderDao.userOrderCount(userId);
+    }
 }
